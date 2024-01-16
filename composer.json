@@ -1,0 +1,21 @@
+{
+    "name": "garvinhicking/typo3-documentation-browsersync",
+    "description": "Standalone project (NodeJS, browsersync) to render and hot-reload changes in ReST documentation to your browser window",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "symfony/console": "^6.4",
+        "symplify/phpstan-rules": "^12.4"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    }
+}
