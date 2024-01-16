@@ -1,0 +1,14 @@
+{
+  "name": "garvinhicking/typo3-documentation-browsersync",
+  "version": "0.1.0",
+  "author": "Garvin Hicking",
+  "license": "MIT",
+  "type": "module",
+  "main": "vite.config.js",
+  "scripts": {
+    "dev": "vite --host"
+  },
+  "dependencies": {
+    "vite": "^5.0.11"
+  }
+}
