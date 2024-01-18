@@ -1,2 +1,5 @@
 vendor
 node_modules
+vite.config.js.timestamp*
+Output/*
+Documentation-GENERATED-temp/*
