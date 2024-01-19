@@ -1,0 +1,11 @@
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - "${HOST_PORT:-5173}:${CONTAINER_PORT:-5173}"
+    environment:
+      - HOST_PORT
+      - CONTAINER_PORT

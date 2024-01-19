@@ -3,8 +3,19 @@
     "description": "Standalone project (NodeJS, browsersync) to render and hot-reload changes in ReST documentation to your browser window",
     "license": "MIT",
     "require": {
-        "php": "^8.1"
+        "php": "^8.2",
+        "t3docs/render-guides": "dev-main"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/TYPO3-Documentation/render-guides"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/brotkrueml/twig-codehighlight"
+        }
+    ],
     "require-dev": {
         "phpstan/phpstan": "^1.10",
         "symfony/console": "^6.4",
