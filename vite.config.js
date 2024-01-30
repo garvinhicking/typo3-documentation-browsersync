@@ -41,6 +41,20 @@ if (!isSubdirectory(process.cwd(), targetDirectory)) {
   process.exit(1);
 }
 
+if (!existsSync(targetDirectory + '/Index.html')) {
+  console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[31mSpecified \x1b[4m${targetDirectory}/Index.html\x1b[0m\x1b[31m does not exist, issue first-time render.\x1b[0m`);
+  try {
+    const shellExec = execSync(
+        'php /opt/guides/bin/guides --no-progress --config Documentation Documentation'
+    ).toString();
+
+    console.log(shellExec);
+    console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[32m\x1b[33mInitial Rendering performed.\x1b[0m`);
+  } catch (error) {
+    console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[1m\x1b[31mRendering Error:\x1b[0m\n-------------------\n${error.message}-------------------\n`);
+  }
+}
+
 console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[32mListening on \x1b[4m${sourceDirectory}\x1b[0m\x1b[32m which renders to \x1b[4m${targetDirectory}\x1b[0m`);
 console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[32mUse e.g. \x1b[4mhttp://localhost:${vitePort}/${targetDirectory}/Index.html\x1b[0m\x1b[32m to view documentation.\x1b[0m`);
 
