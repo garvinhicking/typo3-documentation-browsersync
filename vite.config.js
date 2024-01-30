@@ -74,11 +74,8 @@ export default defineConfig({
             // The container by defaults operates on /project/Documentation/ and writes to /project/Documentation-GENERATED-temp/.
             // We make our lives easy by just mapping those expected directories to our sourceDirectory/targetDirectory variables.
             const shellExec = execSync(
-                'docker run --rm --pull always '
-                + ' -v ./' + sourceDirectory + ':/project/Documentation '
-                + ' -v ./' + targetDirectory + ':/project/Documentation-GENERATED-temp '
-                + ' ghcr.io/typo3-documentation/render-guides:latest '
-                + ' --no-progress Documentation').toString();
+                'php /opt/guides/bin/guides --no-progress --config Documentation Documentation'
+            ).toString();
 
             console.log(shellExec);
             console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[32m\x1b[33mRendering performed.\x1b[0m`);

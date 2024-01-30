@@ -10,10 +10,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/TYPO3-Documentation/render-guides"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/brotkrueml/twig-codehighlight"
         }
     ],
     "require-dev": {
