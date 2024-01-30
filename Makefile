@@ -13,9 +13,10 @@ docker-enter: ## Enter a locally build image
 
 .PHONY: watch
 watch: ## Run the locally build image
-	docker run --rm \
+	docker run -it --rm \
            -v "./Input:/project/Documentation" \
            -v "./Output:/project/Documentation-GENERATED-temp" \
+           -p 5173:5173
            typo3-documentation-browsersync:local
 
 .PHONY: render-docs

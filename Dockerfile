@@ -26,7 +26,7 @@ RUN apk add php82-cli php82-phar php82-dom php82-fileinfo php82-iconv php82-mbst
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+    npm ci --verbose --omit=dev
 
 # Run the application as a non-root user.
 # USER node
