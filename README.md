@@ -90,4 +90,7 @@ docker build . -t typo3-documentation-browsersync:local -f Dockerfile-renderguid
 
 Port configuration
 
+Create browsersync-demo project with an simple "Documentation" directory and
+some RST in it, plus a docker-compose.yaml file and a "docker run" example.
+
 All of it.
