@@ -5,7 +5,10 @@
 Standalone project (NodeJS, browsersync) to render and hot-reload changes 
 in ReST documentation to your browser window.
 
-This project provides a proxy server that returns your rendered ReST
+This project exists to be build as a Docker container. It's not meant
+to be run natively.
+
+The Docker container provides a proxy server that returns (proxies) your rendered ReST
 documentation (as HTML) to a browser. Any change you make to the ReST-files
 will automatically trigger a reload of your browser window.
 
@@ -54,43 +57,69 @@ issues on their dependencies.
 
 ## General Usage
 
-The repository https://github.com/garvinhicking/typo3-documentation-browsersync
-allows for multiple ways to be used.
+(WORK IN PROGRESS)
 
-This project depends on the ability to execute Docker Images on your host.
+This project depends on the ability to execute Docker Containers on your host.
 
-The easiest way to use this is via the ready-to-use Docker Image.
+Via GitHub Actions, this project creates a Docker Container on ghcr.io via
+a multi-stage build process.
 
-You can:
- 
-   * The project itself is built as a ready-to-use Docker Image, so you
-     don't need to install it at all on your host. Context is specified
-     via arguments to the Docker command. This is the recommended and
-     easiest way of usage.
+The contained `Dockerfile` performs this:
 
-   * Include it as a `dev-dependency` composer package to any of your TYPO3 
-     documentation or extension projects, so the context can be autodetected.
+* Use the `TYPO3-Documentation/render-guides` base Docker container
+  (`:latest`)
+* Puts a NodeJS alpine environment on top
+* Configures PHP (so the render-guides base can be used)
+* Setup NPM and vite
 
-   * You can globally require the composer package to be able to use
-     it anyhwere. You will then need to specify context (directories) to
-     its execution.
+You can use the provided Docker container easily in any project:
 
-For the last two options, you need to be able to either locally run
-NodeJS and npm, or to build your own Docker Image via this repository.
+```
+docker run --rm -it --pull always \
+         -v "./Documentation:/project/Documentation" \
+         -v "./Documentation-GENERATED-temp:/project/Documentation-GENERATED-temp" \
+         -p 5173:5173 ghcr.io/garvinhicking/typo3-documentation-browsersync:latest
+```
 
-### Usage via Docker (recommended)
+There's a simple demo project which showcases how to use it:
 
-### Usage via `dev-dependency`
+https://github.com/garvinhicking/demo-typo3-documentation-browsersync
 
-### Usage via global dependency
+## Building a local container
 
-## TODO
+If you check out this project, you can build the Docker container yourself:
 
-docker build . -t typo3-documentation-browsersync:local -f Dockerfile-renderguides
+```
+docker build . -t typo3-documentation-browsersync:local
+```
 
-Port configuration
+and then execute it via:
 
-Create browsersync-demo project with an simple "Documentation" directory and
-some RST in it, plus a docker-compose.yaml file and a "docker run" example.
+```
+docker run --rm -it --pull always \
+         -v "./Documentation:/project/Documentation" \
+         -v "./Documentation-GENERATED-temp:/project/Documentation-GENERATED-temp" \
+         -p 5173:5173 typo3-documentation-browsersync:local
 
-All of it.
+```
+
+## Notes
+
+A first idea was to also provide a native way (without Docker) to
+perform rendering and proxying locally. The depedency chain for this
+was harsh, and the `render-guides` project does not support being
+used as a dependency.
+
+So this is currently "beyond scope". The repository has a base
+`composer.json` file and abilities to run locally, but this is
+just a stub.
+
+The only vital things inside this project are:
+
+* `package.json`, `package-lock.json`: NPM dependencies
+* `vite.config.js`: The actual "code"
+* `Dockerfile`: The instructions to build the Docker Container
+* `.dockerignore`: Excluded files for Docker Container
+* `.nvmrc`: NVM version config
+* `.github/workflows`: GitHub workflow definition to automatically provide
+Docker Containers to the world
