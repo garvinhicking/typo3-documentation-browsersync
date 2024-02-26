@@ -17,7 +17,7 @@ COPY --from=Renderguides /opt/guides /opt/guides
 ENV NODE_ENV production
 WORKDIR ${MAIN_WORKDIR}
 
-RUN apk add php82-cli php82-phar php82-dom php82-fileinfo php82-iconv php82-mbstring php82-tokenizer php82-xml php82-xmlwriter --no-cache
+RUN apk add php82-cli php82-phar php82-dom php82-fileinfo php82-iconv php82-mbstring php82-tokenizer php82-xml php82-xmlwriter php82-openssl --no-cache
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
