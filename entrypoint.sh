@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+echo "ENV:"
+echo "LOCAL_RENDER_PORT   = $LOCAL_RENDER_PORT"
+echo "LOCAL_RENDER_INPUT  = $LOCAL_RENDER_INPUT"
+echo "LOCAL_RENDER_OUTPUT = $LOCAL_RENDER_OUTPUT"
 MY_UID="$(id -u)"
 
 if [ "${MY_UID}" -eq "0" ]; then
@@ -15,6 +19,7 @@ if [ "${MY_UID}" -eq "0" ]; then
 
         echo "#!/usr/bin/env sh" > /usr/local/bin/invocation.sh
         echo >> /usr/local/bin/invocation.sh
+        echo "npm run dev" >> /usr/local/bin/invocation.sh
         chmod a+x /usr/local/bin/invocation.sh
         
         su - typo3 -c "/usr/local/bin/invocation.sh"

@@ -134,6 +134,9 @@ LOCAL_RENDER_OUTPUT=Documentation-GENERATED-temp; \
 \
 open "http://localhost:${LOCAL_RENDER_PORT}/Documentation-GENERATED-temp/Index.html" && \
 docker run --rm -it --pull always \
+  -e LOCAL_RENDER_PORT=$LOCAL_RENDER_PORT \
+  -e LOCAL_RENDER_INPUT=$LOCAL_RENDER_INPUT \
+  -e LOCAL_RENDER_OUTPUT=$LOCAL_RENDER_OUTPUT \
   -v "$(pwd)/${LOCAL_RENDER_INPUT}:/project/Documentation" \
   -v "$(pwd)/${LOCAL_RENDER_OUTPUT}:/project/Documentation-GENERATED-temp" \
   -p "${LOCAL_RENDER_PORT}:5173" \
@@ -143,6 +146,10 @@ docker run --rm -it --pull always \
 See the file `alias.sh` in this repository, you could place these
 lines into an alias of your Shell, or place it in a
 `/usr/local/bin/render-wysiwyg.sh` file and call it.
+
+The reason why the environment variables are called twice is because the
+docker run command already needs to access them, and then they also need
+to be propagated into the docker container as well.
 
 ## Notes
 

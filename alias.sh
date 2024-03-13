@@ -15,4 +15,4 @@
 
 LOCAL_RENDER_PORT=5175 LOCAL_RENDER_INPUT=Documentation LOCAL_RENDER_OUTPUT=Documentation-GENERATED-temp; \
 open "http://localhost:${LOCAL_RENDER_PORT}/Documentation-GENERATED-temp/Index.html" && \
-docker run --rm -it --pull always -v "$(pwd)/${LOCAL_RENDER_INPUT}:/project/Documentation" -v "$(pwd)/${LOCAL_RENDER_OUTPUT}:/project/Documentation-GENERATED-temp" -p "${LOCAL_RENDER_PORT}:5173" ghcr.io/garvinhicking/typo3-documentation-browsersync:latest
+docker run --rm -it --pull always -e LOCAL_RENDER_PORT=$LOCAL_RENDER_PORT -e LOCAL_RENDER_INPUT=$LOCAL_RENDER_INPUT -e LOCAL_RENDER_OUTPUT=$LOCAL_RENDER_OUTPUT -v "$(pwd)/${LOCAL_RENDER_INPUT}:/project/Documentation" -v "$(pwd)/${LOCAL_RENDER_OUTPUT}:/project/Documentation-GENERATED-temp" -p "${LOCAL_RENDER_PORT}:5173" ghcr.io/garvinhicking/typo3-documentation-browsersync:latest
