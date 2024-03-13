@@ -13,12 +13,13 @@ function isSubdirectory(parent, child) {
   return !relativePath.startsWith(`..${sep}`) && !relativePath.startsWith(sep);
 }
 
-let sourceDirectory = process.env.SOURCE || 'Documentation';
-let targetDirectory = process.env.TARGET || 'Documentation-GENERATED-temp';
+let sourceDirectory = process.env.LOCAL_RENDER_INPUT || 'Documentation';
+let targetDirectory = process.env.LOCAL_RENDER_OUTPUT || 'Documentation-GENERATED-temp';
 let vitePort        = process.env.VITE_PORT || 5173;
+let hostPort        = process.env.LOCAL_RENDER_PORT || vitePort;
 
 // Example how to run this with different directories:
-// SOURCE=./path/to/Documentation TARGET=./another/path/to/Documentation-Output/ VITE_PORT=5173 npm run dev
+// LOCAL_RENDER_INPUT=./path/to/Documentation LOCAL_RENDER_OUTPUT=./another/path/to/Documentation-Output/ VITE_PORT=5173 LOCAL_RENDER_PORT=5173 npm run dev
 // Note that the paths need to be within the project directory, else vite does not watch these directories.
 
 if (!existsSync(sourceDirectory)) {
@@ -56,7 +57,7 @@ if (!existsSync(targetDirectory + '/Index.html')) {
 }
 
 console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[32mListening on \x1b[4m${sourceDirectory}\x1b[0m\x1b[32m which renders to \x1b[4m${targetDirectory}\x1b[0m`);
-console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[32mUse e.g. \x1b[4mhttp://localhost:${vitePort}/${targetDirectory}/Index.html\x1b[0m\x1b[32m to view documentation.\x1b[0m`);
+console.log(`\x1b[37m\x1b[2m${new Date().toLocaleTimeString()}\x1b[0m \x1b[1m\x1b[36m[typo3-documentation-browsersync] \x1b[0m\x1b[32mUse e.g. \x1b[4mhttp://localhost:${hostPort}/${targetDirectory}/Index.html\x1b[0m\x1b[32m to view documentation.\x1b[0m`);
 
 export default defineConfig({
   build: {
