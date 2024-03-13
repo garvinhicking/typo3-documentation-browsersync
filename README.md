@@ -82,6 +82,14 @@ docker run --rm -it --pull always \
          -p 5173:5173 ghcr.io/garvinhicking/typo3-documentation-browsersync:latest
 ```
 
+This starts a server to listen on localhost port 5173, so you can
+point your browser to a URL like this:
+
+```
+http://localhost:5173/Documentation-GENERATED-temp/Index.html
+```
+
+
 There's a simple demo project which showcases how to use it:
 
 https://github.com/garvinhicking/demo-typo3-documentation-browsersync
@@ -104,6 +112,35 @@ docker run --rm -it --pull always \
 
 ```
 
+## Changing default port and directories
+
+You can provide these environment variables, if you want to run
+on non-default ports and different directories:
+
+* LOCAL_RENDER_PORT=5173
+* LOCAL_RENDER_INPUT=Documentation
+* LOCAL_RENDER_OUTPUT=Documentation-GENERATED-temp
+
+So a full docker run command utilizing this, and directly opening
+a browser window with the URL, would look like:
+
+```
+LOCAL_RENDER_PORT=5175 \
+LOCAL_RENDER_INPUT=Documentation \
+LOCAL_RENDER_OUTPUT=Documentation-GENERATED-temp; \
+\
+open "http://localhost:${LOCAL_RENDER_PORT}/Documentation-GENERATED-temp/Index.html" && \
+docker run --rm -it --pull always \
+  -v "$(pwd)/${LOCAL_RENDER_INPUT}:/project/Documentation" \
+  -v "$(pwd)/${LOCAL_RENDER_OUTPUT}:/project/Documentation-GENERATED-temp" \
+  -p "${LOCAL_RENDER_PORT}:5173" \
+  ghcr.io/garvinhicking/typo3-documentation-browsersync:latest
+```
+
+See the file `alias.sh` in this repository, you could place these
+lines into an alias of your Shell, or place it in a
+`/usr/local/bin/render-wysiwyg.sh` file and call it.
+
 ## Notes
 
 A first idea was to also provide a native way (without Docker) to
@@ -122,5 +159,4 @@ The only vital things inside this project are:
 * `Dockerfile`: The instructions to build the Docker Container
 * `.dockerignore`: Excluded files for Docker Container
 * `.nvmrc`: NVM version config
-* `.github/workflows`: GitHub workflow definition to automatically provide
-Docker Containers to the world
+* `.github/workflows`: GitHub workflow definition to automatically provide Docker Containers to the world
