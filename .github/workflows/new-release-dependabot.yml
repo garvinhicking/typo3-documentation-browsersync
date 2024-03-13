@@ -1,0 +1,38 @@
+name: Create Release on Dependabot Update
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  create_release:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && contains(github.event.pull_request.labels.*.name, 'dependencies')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get latest release version
+        id: get_latest_release
+        run: |
+          latest_release=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest | jq -r '.tag_name')
+          echo "::set-output name=version::$latest_release"
+
+      - name: Calculate next patch level version
+        id: calculate_patch_level
+        run: |
+          IFS='.' read -r -a version_parts <<< "${{ steps.get_latest_release.outputs.version }}"
+          next_patch_level=$((version_parts[2]+1))
+          next_version="${version_parts[0]}.${version_parts[1]}.$next_patch_level"
+          echo "::set-output name=next_version::$next_version"
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.calculate_patch_level.outputs.next_version }}
+          release_name: Release ${{ steps.calculate_patch_level.outputs.next_version }}
+          body: New Docker container version released
+          draft: false
+          prerelease: false
