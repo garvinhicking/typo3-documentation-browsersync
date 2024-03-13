@@ -39,5 +39,6 @@ EXPOSE ${NODE_PORT}
 
 
 # Run the application.
-CMD npm run dev
+ENTRYPOINT [ "/project/entrypoint.sh" ]
+#CMD npm run dev
 
