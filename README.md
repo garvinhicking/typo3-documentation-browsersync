@@ -62,6 +62,9 @@ issues on their dependencies.
 
 This project depends on the ability to execute Docker Containers on your host.
 
+You can also use Podman, if you prefer. Replace the `docker` commands with
+`podman` in that case.
+
 Via GitHub Actions, this project creates a Docker Container on ghcr.io via
 a multi-stage build process.
 
