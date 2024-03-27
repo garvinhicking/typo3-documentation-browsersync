@@ -14,7 +14,14 @@ jobs:
         id: dependabot_check
         run: echo "::set-output name=is_dependabot::${{ contains(github.actor, 'dependabot') }}"
 
-      - name: Checkout repository
+      - name: Enable auto-merge for Dependabot PRs
+        if: steps.dependabot_check.outputs.is_dependabot == 'true' && github.event_name == 'pull_request'
+        run: gh pr merge --auto --merge "$PR_URL" # Use Github CLI to merge automatically the PR
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+              
+      - name: Checkout repository AFTER MERGE
         uses: actions/checkout@v2
 
       - name: Get latest release version
