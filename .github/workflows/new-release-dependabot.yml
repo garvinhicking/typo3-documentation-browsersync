@@ -2,13 +2,18 @@ name: Create Release on Dependabot Update
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize]
 
 jobs:
   create_release:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && contains(github.event.pull_request.labels.*.name, 'dependencies')
     runs-on: ubuntu-latest
+
+    if: contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
+      - name: Check if the PR is from Dependabot
+        id: dependabot_check
+        run: echo "::set-output name=is_dependabot::${{ contains(github.actor, 'dependabot') }}"
+
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -27,12 +32,13 @@ jobs:
           echo "::set-output name=next_version::$next_version"
 
       - name: Create Release
+        if: steps.dependabot_check.outputs.is_dependabot == 'true' && github.event_name == 'pull_request'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.calculate_patch_level.outputs.next_version }}
-          release_name: Release ${{ steps.calculate_patch_level.outputs.next_version }}
-          body: New Docker container version released
+          release_name: render-guides Sync release ${{ steps.calculate_patch_level.outputs.next_version }}
+          body: Automated synchronization with the main render-guides docker container.
           draft: false
           prerelease: false
