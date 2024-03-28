@@ -12,7 +12,7 @@ jobs:
 
     if: contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
-      - name: Check if the PR is from Dependabot
+      - name: Check if the PR comes from Dependabot
         id: dependabot_check
         run: echo "::set-output name=is_dependabot::${{ contains(github.actor, 'dependabot') }}"
 
