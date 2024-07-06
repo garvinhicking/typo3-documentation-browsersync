@@ -18,6 +18,8 @@ ENV NODE_ENV production
 WORKDIR ${MAIN_WORKDIR}
 
 RUN apk add php82-cli php82-phar php82-dom php82-fileinfo php82-iconv php82-mbstring php82-tokenizer php82-xml php82-xmlwriter php82-openssl --no-cache
+# Don't ask me why, there's no default "php" anymore -.-
+RUN ln -s /usr/bin/php82 /usr/local/bin/php
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
