@@ -2,9 +2,9 @@ on:
   push:
     tags:
       - '*.*.*'
-  release:
-    types:
-      - published
+#  release:
+#    types:
+#      - published
 
 env:
   REGISTRY: ghcr.io
