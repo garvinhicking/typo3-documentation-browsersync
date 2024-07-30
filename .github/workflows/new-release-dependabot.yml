@@ -1,4 +1,4 @@
-name: Create Release on Dependabot Update
+name: new-release-dependabot
 
 permissions: write-all
 

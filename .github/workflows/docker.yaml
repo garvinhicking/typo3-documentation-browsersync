@@ -1,3 +1,5 @@
+name: docker-build
+
 on:
   push:
     tags:
@@ -6,10 +8,17 @@ on:
 #    types:
 #      - published
 
+workflow_run:
+  workflows:
+    - "new-release-dependabot"
+  branches:
+    - "main"
+  types:
+    - completed
+
 env:
   REGISTRY: ghcr.io
 
-name: Docker build
 jobs:
   build:
     runs-on: ubuntu-latest
