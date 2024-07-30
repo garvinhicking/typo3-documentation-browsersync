@@ -44,7 +44,7 @@ jobs:
         if: steps.dependabot_check.outputs.is_dependabot == 'true' && github.event_name == 'pull_request'
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           tag_name: ${{ steps.calculate_patch_level.outputs.next_version }}
           release_name: render-guides Sync release ${{ steps.calculate_patch_level.outputs.next_version }}
