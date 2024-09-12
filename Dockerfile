@@ -20,7 +20,7 @@ COPY --from=renderguides /opt/guides /opt/guides
 ENV NODE_ENV=production
 WORKDIR ${MAIN_WORKDIR}
 
-RUN apk add php82-cli php82-phar php82-dom php82-fileinfo php82-iconv php82-mbstring php82-tokenizer php82-xml php82-xmlwriter php82-openssl --no-cache
+RUN apk add php82-cli php82-curl php82-phar php82-dom php82-fileinfo php82-iconv php82-mbstring php82-tokenizer php82-xml php82-xmlwriter php82-openssl --no-cache
 # Don't ask me why, there's no default "php" anymore -.-
 RUN ln -s /usr/bin/php82 /usr/local/bin/php
 
