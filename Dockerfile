@@ -3,7 +3,7 @@ ARG NODE_VERSION=20
 ARG NODE_PORT=5173
 ARG MAIN_WORKDIR=/project
 
-FROM ghcr.io/typo3-documentation/render-guides:0.14.6 AS renderguides
+FROM ghcr.io/typo3-documentation/render-guides:0.15.1 AS renderguides
 ARG NODE_VERSION
 ARG NODE_PORT
 ARG MAIN_WORKDIR
