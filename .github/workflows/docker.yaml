@@ -35,6 +35,9 @@ jobs:
         run: |
           echo IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
+      - name: Set platform name variable
+        run: echo "PLATFORM_NAME=${{ matrix.platform }}/" | sed 's/\//-/g' >> $GITHUB_ENV
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
@@ -82,7 +85,7 @@ jobs:
         name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ matrix.platform && matrix.platform.replace('/', '-') }}
+          name: digests-${{ env.PLATFORM_NAME }}
           overwrite: true
           path: /tmp/digests/*
           if-no-files-found: error
