@@ -36,7 +36,7 @@ jobs:
           echo IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Set platform name variable
-        run: echo "PLATFORM_NAME=${{ matrix.platform }}/" | sed 's/\//-/g' >> $GITHUB_ENV
+        run: echo "PLATFORM_NAME=${{ matrix.platform }}" | sed 's/\//-/g' >> $GITHUB_ENV
 
       - name: Docker meta
         id: meta
