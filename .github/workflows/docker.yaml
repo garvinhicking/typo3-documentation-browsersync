@@ -144,8 +144,20 @@ jobs:
         name: Create manifest list and push
         working-directory: /tmp/merged-digests
         run: |
-          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' all_digests.txt)
+          # Build tag options from the Docker metadata output
+          tags=$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+
+          # Prepare the full command
+          command="docker buildx imagetools create $tags"
+
+          # Loop through each digest in all_digests.txt and append it to the command
+          while IFS= read -r digest; do
+            command+=" ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:$digest"
+          done < all_digests.txt
+
+          # Execute the command
+          echo "$command"
+          eval "$command"
       -
         name: Inspect image
         run: |
