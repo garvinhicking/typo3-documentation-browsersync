@@ -141,14 +141,16 @@ jobs:
           # Build tag options from the Docker metadata output
           tags=$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
 
+          find /tmp/merged-digests -exec ls -lad {} \;
+          cat /tmp/merged-digests/linux-arm64/*
+          cat /tmp/merged-digests/linux-amd64/*
+          cat /tmp/merged-digests/*/* > /tmp/merged-digests/all.txt
+
           # Prepare the full command
-          command="docker buildx imagetools create $tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:/tmp/merged-digests/linux-arm64 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:/tmp/merged-digests/linux-amd64"
+          command="docker buildx imagetools create $tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:/tmp/merged-digests/all.txt"
 
           # Show and Execute the command
           echo "$command"
-          find /tmp/merged-digests -exec ls -lad {} \;
-          cat /tmp/merged-digests/linux-arm64
-          cat /tmp/merged-digests/linux-amd64
           eval "$command"
       -
         name: Inspect image
