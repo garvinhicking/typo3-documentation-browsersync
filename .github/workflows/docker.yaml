@@ -144,7 +144,15 @@ jobs:
           find /tmp/merged-digests -type f
 
           # Prepare the full command
-          command="docker buildx imagetools create $tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:/tmp/merged-digests/linux-arm64/* ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:/tmp/merged-digests/linux-amd64/*"
+          command="docker buildx imagetools create $tags"
+          
+          for platform in linux-arm64 linux-amd64; do
+            # Get the filename in the platform-specific directory
+            digest_file=$(ls /tmp/merged-digests/$platform/* | head -n 1)
+            
+            # Append the fully qualified digest to the command
+            command+=" ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:/tmp/merged-digests/linux-arm64/$(basename $digest_file)"
+          done          
 
           # Show and Execute the command
           echo "$command"
