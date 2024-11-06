@@ -113,12 +113,6 @@ jobs:
         with:
           name: digests-linux-amd64
           path: /tmp/merged-digests/linux-amd64
-      - 
-        name: Merge digests
-        run: |
-          # download-artifact does not support downloading digests,
-          # so we need to now merge our seperately downloaded digests into one.,
-          cat /tmp/merged-digests/*/* > /tmp/merged-digests/all_digests.txt
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -148,14 +142,9 @@ jobs:
           tags=$(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
 
           # Prepare the full command
-          command="docker buildx imagetools create $tags"
+          command="docker buildx imagetools create $tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:/tmp/merged-digests/linux-arm64 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:/tmp/merged-digests/linux-amd64"
 
-          # Loop through each digest in all_digests.txt and append it to the command
-          while IFS= read -r digest; do
-            command+=" ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:$digest"
-          done < all_digests.txt
-
-          # Execute the command
+          # Show and Execute the command
           echo "$command"
           eval "$command"
       -
