@@ -146,6 +146,9 @@ jobs:
 
           # Show and Execute the command
           echo "$command"
+          find /tmp/merged-digests -exec ls -lad {} \;
+          cat /tmp/merged-digests/linux-arm64
+          cat /tmp/merged-digests/linux-amd64
           eval "$command"
       -
         name: Inspect image
