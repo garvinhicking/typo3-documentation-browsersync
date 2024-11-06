@@ -82,7 +82,7 @@ jobs:
         name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests
+          name: digests-${{ matrix.platform && matrix.platform.replace('/', '-') }}
           overwrite: true
           path: /tmp/digests/*
           if-no-files-found: error
@@ -99,11 +99,22 @@ jobs:
           echo IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       -
-        name: Download digests
-        uses: actions/download-artifact@v3
+        name: Download digests linux/arm64
+        uses: actions/download-artifact@v4
         with:
-          name: digests
-          path: /tmp/digests
+          name: digests-linux-arm64
+          path: /tmp/digests-linux-arm64
+      -
+        name: Download digests linux/amd64
+        uses: actions/download-artifact@v4
+        with:
+          name: digests-linux-amd64
+          path: /tmp/digests-linux-arm64
+      - name: Merge digests
+        run: |
+          # download-artifact does not support downloading digests,
+          # so we need to now merge our seperately downloaded digests into one.,
+          cat /tmp/merged-digests/*/* > /tmp/merged-digests/all_digests.txt
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -127,10 +138,10 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
       -
         name: Create manifest list and push
-        working-directory: /tmp/digests
+        working-directory: /tmp/merged-digests
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' all_digests.txt)
       -
         name: Inspect image
         run: |
