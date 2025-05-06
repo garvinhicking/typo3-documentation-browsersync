@@ -9,6 +9,6 @@
     "dev": "vite --host"
   },
   "dependencies": {
-    "vite": "^5.4.12"
+    "vite": "^6.3.5"
   }
 }
